@@ -10,11 +10,11 @@ declare type SearchParamProps = {
 declare type SignUpParams = {
 	firstName: string
 	lastName: string
-	address1: string
+	address: string
 	city: string
 	state: string
 	postalCode: string
-	dateOfBirth: string
+	dateOfBirth: Date
 	ssn: string
 	email: string
 	password: string
@@ -33,11 +33,11 @@ declare type User = {
 	dwollaCustomerId: string
 	firstName: string
 	lastName: string
-	address1: string
+	address: string
 	city: string
 	state: string
 	postalCode: string
-	dateOfBirth: string
+	dateOfBirth: Date
 	ssn: string
 }
 
@@ -74,7 +74,6 @@ declare type Transaction = {
 	category: string
 	date: string
 	image: string
-	type: string
 	$createdAt: string
 	channel: string
 	senderBankId: string
@@ -128,11 +127,11 @@ declare type NewDwollaCustomerParams = {
 	lastName: string
 	email: string
 	type: string
-	address1: string
+	address: string
 	city: string
 	state: string
 	postalCode: string
-	dateOfBirth: string
+	dateOfBirth: Date
 	ssn: string
 }
 
@@ -178,14 +177,14 @@ declare interface PlaidLinkProps {
 	dwollaCustomerId?: string
 }
 
-// declare type User = sdk.Models.Document & {
-//   accountId: string;
-//   email: string;
-//   name: string;
-//   items: string[];
-//   accessToken: string;
-//   image: string;
-// };
+declare type User = sdk.Models.Document & {
+	accountId: string
+	email: string
+	name: string
+	items: string[]
+	accessToken: string
+	image: string
+}
 
 declare interface AuthFormProps {
 	type: "sign-in" | "sign-up"
@@ -210,10 +209,11 @@ declare interface TotlaBalanceBoxProps {
 
 declare interface FooterProps {
 	user: User
+	type?: "mobile" | "desktop"
 }
 
 declare interface RightSidebarProps {
-	user: User
+	user: User | undefined
 	transactions: Transaction[]
 	banks: Bank[] & Account[]
 }

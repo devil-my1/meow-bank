@@ -1,14 +1,14 @@
-"use client"
 import Header from "@/components/Header"
 import RightSideBar from "@/components/RightSideBar"
 import TotalBalanceBox from "@/components/TotalBalanceBox"
-import Image from "next/image"
+import { getLoggedInUser } from "@/lib/actions/user.action"
+import { redirect } from "next/navigation"
 
-export default function Home() {
-	const loggedInUser = {
-		firstName: "Amir",
-		lastName: "ProgFa"
-	}
+export default async function Home() {
+	const loggedInUser = await getLoggedInUser()
+
+	if (!loggedInUser) redirect("/sign-in")
+
 	return (
 		<section className='home'>
 			<div className='home-content'>
