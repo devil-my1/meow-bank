@@ -1,13 +1,21 @@
 import Header from "@/components/Header"
+import RecentTransactions from "@/components/RecentTransactions"
 import RightSideBar from "@/components/RightSideBar"
 import TotalBalanceBox from "@/components/TotalBalanceBox"
+import { getAccount, getAccounts } from "@/lib/actions/bank.action"
 import { getLoggedInUser } from "@/lib/actions/user.action"
-import { redirect } from "next/navigation"
 
-export default async function Home() {
+export default async function Home({ searchParams }: SearchParamProps) {
+	const currentPage = Number((await searchParams)?.page as string) || 1
+	const id = ((await searchParams)?.id as string) || undefined
 	const loggedInUser = await getLoggedInUser()
+	const accounts = await getAccounts({ userId: loggedInUser?.$id! })
 
-	if (!loggedInUser) redirect("/sign-in")
+	if (!accounts) return
+
+	const appwriteItemId = id || accounts.data[0].appwriteItemId
+
+	const account = await getAccount({ appwriteItemId })
 
 	return (
 		<section className='home'>
@@ -20,16 +28,22 @@ export default async function Home() {
 						subtext='Access and manage your account and transactions efficiently.'
 					/>
 					<TotalBalanceBox
-						accounts={[]}
-						totalBanks={1}
-						totalCurrentBalance={3000}
+						accounts={accounts.data}
+						totalBanks={accounts.totalBanks}
+						totalCurrentBalance={accounts.totalCurrentBalance}
 					/>
 				</header>
+				<RecentTransactions
+					accounts={accounts.data}
+					transactions={account?.transactions}
+					appwriteItemId={appwriteItemId}
+					page={currentPage}
+				/>
 			</div>
 			<RightSideBar
 				user={loggedInUser}
-				transactions={[]}
-				banks={[{ currentBalance: 250.15 }, { currentBalance: 500.25 }]}
+				transactions={account?.transactions}
+				banks={accounts.data?.slice(0, 2)}
 			/>
 		</section>
 	)

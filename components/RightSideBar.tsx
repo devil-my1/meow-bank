@@ -2,8 +2,11 @@ import { Plus } from "lucide-react"
 import Link from "next/link"
 import React from "react"
 import BankCard from "./BankCard"
+import { countTransactionCategories } from "@/lib/utils"
+import Category from "./Category"
 
 const RightSideBar = ({ banks, transactions, user }: RightSidebarProps) => {
+	const categories = countTransactionCategories(transactions)
 	return (
 		<aside className='right-sidebar'>
 			<section className='flex flex-col pb-8'>
@@ -33,7 +36,7 @@ const RightSideBar = ({ banks, transactions, user }: RightSidebarProps) => {
 						<span className=''>Add Bank</span>
 					</Link>
 				</div>
-				{banks?.length > 0 && (
+				{banks && banks?.length > 0 && (
 					<div className='relative flex flex-1 flex-col items-center justify-center gap-5'>
 						<div className='relative z-10'>
 							<BankCard
@@ -55,6 +58,17 @@ const RightSideBar = ({ banks, transactions, user }: RightSidebarProps) => {
 						)}
 					</div>
 				)}
+				<div className='mt-10 flex flex-1 flex-col gap-6'>
+					<h2 className='header-2'>Top categories</h2>
+					<div className='space-y-5'>
+						{categories.map((category, index) => (
+							<Category
+								key={category.name}
+								category={category}
+							/>
+						))}
+					</div>
+				</div>
 			</section>
 		</aside>
 	)

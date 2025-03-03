@@ -1,6 +1,6 @@
 import { Models } from "node-appwrite"
 
-export interface User extends Models.Document {
+export interface AppwriteUser extends Models.Document {
 	userId: string
 	lastName: string
 	firstName: string
@@ -15,7 +15,7 @@ export interface User extends Models.Document {
 	ssn: string
 }
 
-export interface Transaction extends Models.Document {
+export interface AppwriteTransaction extends Models.Document {
 	id: string
 	name: string
 	paymentChannel: string
@@ -31,11 +31,11 @@ export interface Transaction extends Models.Document {
 	receiverBankId: string
 }
 
-export interface Bank extends Models.Document {
+export interface AppwriteBank extends Models.Document {
 	accountId: string
 	bankId: string
 	accessToken: string
 	fundingSourceUrl: string
-	userId: string
+	userId: AppwriteUser
 	sharableId: string
 }
